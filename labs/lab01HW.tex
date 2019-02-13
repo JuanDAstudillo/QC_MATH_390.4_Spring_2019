@@ -1,0 +1,692 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Lab 1},
+            pdfauthor={Juan D Astudillo},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Lab 1}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Juan D Astudillo}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \date{}
+  \predate{}\postdate{}
+
+
+\begin{document}
+\maketitle
+
+This lab is due 11:59 PM Satuday 2/9/19.
+
+You should have RStudio installed to edit this file. You will write code
+in places marked ``TO-DO'' to complete the problems. Some of this will
+be a pure programming assignment. The tools for the solutions to these
+problems can be found in the class practice lectures. I want you to use
+the methods I taught you, not for you to google and come up with
+whatever works. You won't learn that way.
+
+To ``hand in'' the homework, you should compile or publish this file
+into a PDF that includes output of your code. Once it's done, push by
+the deadline to your repository in a directory called ``labs''.
+
+\begin{itemize}
+\tightlist
+\item
+  Print out the numerical constant pi with ten digits after the decimal
+  point using the internal constant \texttt{pi}.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\NormalTok{pi}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.141593
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{options}\NormalTok{ (}\DataTypeTok{digits =} \DecValTok{11}\NormalTok{)}
+\NormalTok{pi}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.1415926536
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Sum up the first 100 terms of the series 1 + 1/2 + 1/4 + 1/8 +
+  \ldots{}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\NormalTok{##x=(1/2)^(0:99)}
+\KeywordTok{sum}\NormalTok{((}\DecValTok{1}\OperatorTok{/}\DecValTok{2}\NormalTok{)}\OperatorTok{^}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{99}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Find the product of the first 100 terms of
+  \texttt{1\ *\ 1/2\ *\ 1/4\ *\ 1/8\ *} \ldots{}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\CommentTok{#x=(1/2)^(0:99)}
+\KeywordTok{prod}\NormalTok{((}\DecValTok{1}\OperatorTok{/}\DecValTok{2}\NormalTok{)}\OperatorTok{^}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{99}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Find the product of the first 500 terms of
+  \texttt{1\ *\ 1/2\ *\ 1/4\ *\ 1/8\ *} \ldots{} Answer in English: is
+  this answer correct? this answer is not correct.
+\end{itemize}
+
+//it is not, but this answer is an aproximatio. Since n of 1/2\^{}n is
+very large the answer will aproximate to infinity.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\NormalTok{y=(}\DecValTok{1}\OperatorTok{/}\DecValTok{2}\NormalTok{)}\OperatorTok{^}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{499}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Figure out a means to express the answer more exactly. Not compute
+  exactly, but express more exactly.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\CommentTok{#we add all the products }
+\NormalTok{x=}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{499}\NormalTok{)}
+\NormalTok{x =}\StringTok{ }\DecValTok{124750}
+\DecValTok{1}\OperatorTok{/}\DecValTok{2}\OperatorTok{^}\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Use the left rectangle method to numerically integrate x\^{}2 from 0
+  to 1 with rectangle size 1e-6.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\FloatTok{1e-6}\OperatorTok{*}\KeywordTok{sum}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{, }\DataTypeTok{by=}\FloatTok{1e-6}\NormalTok{)}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.33333383333
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Calculate the average of 100 realizations of standard Bernoullis in
+  one line using the \texttt{sample} function.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO## remember we dont create vector because is 0 and 1. 50 - 50 probability wHich is standard bernoulli.}
+\CommentTok{# create the vector is for setting probabilities}
+\KeywordTok{sum}\NormalTok{(}\KeywordTok{sample}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{1}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DataTypeTok{replace=}\NormalTok{ T ))}\OperatorTok{/}\DecValTok{100}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.51
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Calculate the average of 500 realizations of Bernoullis with p = 0.9
+  in one line using the \texttt{sample} function.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\CommentTok{#1:0 same as 0:1}
+
+\KeywordTok{sum}\NormalTok{(}\KeywordTok{sample}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{1}\NormalTok{, }\DecValTok{500}\NormalTok{, }\DataTypeTok{replace=}\NormalTok{ T, }\KeywordTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{,}\FloatTok{0.9}\NormalTok{)))}\OperatorTok{/}\DecValTok{500}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.882
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Calculate the average of 1000 realizations of Bernoullis with p = 0.9
+  in one line using \texttt{rbinom}.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\NormalTok{##rbinom(x,size,prob)}
+\KeywordTok{sum}\NormalTok{(}\KeywordTok{rbinom}\NormalTok{(}\DecValTok{1000}\NormalTok{, }\DecValTok{1}\NormalTok{ ,.}\DecValTok{9}\NormalTok{))}\OperatorTok{/}\DecValTok{1000}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.892
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Use the \texttt{strsplit} function and \texttt{sample} to put the
+  sentences below in random order.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lorem =}\StringTok{ "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi posuere varius volutpat. Morbi faucibus ligula id massa ultricies viverra. Donec vehicula sagittis nisi non semper. Donec at tempor erat. Integer dapibus mi lectus, eu posuere arcu ultricies in. Cras suscipit id nibh lacinia elementum. Curabitur est augue, congue eget quam in, scelerisque semper magna. Aenean nulla ante, iaculis sed vehicula ac, finibus vel arcu. Mauris at sodales augue. "}
+\CommentTok{#TO-DO}
+\CommentTok{#strsplit(lorem, "[.]")}
+\CommentTok{#paste(paste(sample(unlist(strsplit(lorem, "[.] "))), collapse = ". "),"." ,sep = "")}
+\CommentTok{#sample(strsplit(lorem, "[.] ")[[1]])#[1:10])}
+\KeywordTok{paste}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\KeywordTok{sample}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(lorem, }\StringTok{"[.] "}\NormalTok{)[[}\DecValTok{1}\NormalTok{]]), }\DataTypeTok{collapse =} \StringTok{". "}\NormalTok{),}\StringTok{"."}\NormalTok{ ,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Donec at tempor erat. Morbi posuere varius volutpat. Cras suscipit id nibh lacinia elementum. Morbi faucibus ligula id massa ultricies viverra. Donec vehicula sagittis nisi non semper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at sodales augue. Curabitur est augue, congue eget quam in, scelerisque semper magna. Integer dapibus mi lectus, eu posuere arcu ultricies in. Aenean nulla ante, iaculis sed vehicula ac, finibus vel arcu."
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  In class we generated the variable criminality with levels ``none'',
+  ``infraction'', ``misdimeanor'' and ``felony''. Create a variable
+  \texttt{x\_2} here with 100 random elements (equally probable) and
+  ensure the proper ordinal ordering.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\NormalTok{levels =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"none"}\NormalTok{, }\StringTok{"infraction"}\NormalTok{, }\StringTok{"misdimeanor"}\NormalTok{, }\StringTok{"felony"}\NormalTok{)}
+\NormalTok{y =}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\KeywordTok{rep}\NormalTok{(levels, }\DecValTok{25}\NormalTok{), }\DataTypeTok{replace =}\NormalTok{ F) ##here we dont need to replace}
+\NormalTok{x_}\DecValTok{2}\NormalTok{ =}\StringTok{ }\KeywordTok{factor}\NormalTok{(y,}\DataTypeTok{levels=}\NormalTok{levels,}\DataTypeTok{ordered =}\NormalTok{ T)}
+\KeywordTok{class}\NormalTok{(x_}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "ordered" "factor"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#x =  sample(rep(levels,25)) ##replace = F by default}
+\NormalTok{##x_2 = factor( x ,levels=levels,ordered= TRUE)## check levels}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Convert this variable to binary where 0 is no crime and 1 is any
+  crime. Answer in English: is this the proper binary threshold?
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\NormalTok{tmp=}\KeywordTok{as.numeric}\NormalTok{(x_}\DecValTok{2}\OperatorTok{!=}\StringTok{"none"}\NormalTok{)##all 0s = no crime =none}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Convert this variable to an unordered, nominal factor variable.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\NormalTok{level =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"none"}\NormalTok{, }\StringTok{"infraction"}\NormalTok{, }\StringTok{"misdimeanor"}\NormalTok{, }\StringTok{" felony"}\NormalTok{)}
+\NormalTok{y =}\StringTok{ }\KeywordTok{sample}\NormalTok{(level, }\DecValTok{100}\NormalTok{ , }\DataTypeTok{replace =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{x_}\DecValTok{3}\NormalTok{ =}\StringTok{ }\KeywordTok{factor}\NormalTok{(y , }\DataTypeTok{levels =}\NormalTok{ level)}
+\KeywordTok{class}\NormalTok{(x_}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "factor"
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Convert this variable into three binary variables without any
+  information loss and put them into a data matrix.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+
+\NormalTok{x_}\DecValTok{4}\NormalTok{ =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(x_}\DecValTok{2}\NormalTok{)}\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{x_}\DecValTok{5}\NormalTok{ =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(x_}\DecValTok{2}\NormalTok{)}\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{x_}\DecValTok{6}\NormalTok{ =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(x_}\DecValTok{2}\NormalTok{)}\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{x_}\DecValTok{7}\NormalTok{ =}\StringTok{ }\KeywordTok{c}\NormalTok{(x_}\DecValTok{4}\NormalTok{,x_}\DecValTok{5}\NormalTok{,x_}\DecValTok{6}\NormalTok{)}
+\NormalTok{x_}\DecValTok{8}\NormalTok{ =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(x_}\DecValTok{7}\NormalTok{,}\DecValTok{100}\NormalTok{,}\DecValTok{3}\NormalTok{)## matrix(x, n , p) n = 100, p = 3}
+\NormalTok{x_}\DecValTok{8}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        [,1] [,2] [,3]
+##   [1,]    1    0    0
+##   [2,]    0    1    0
+##   [3,]    0    0    0
+##   [4,]    0    0    0
+##   [5,]    1    0    0
+##   [6,]    0    0    1
+##   [7,]    0    1    0
+##   [8,]    0    1    0
+##   [9,]    0    0    0
+##  [10,]    0    0    0
+##  [11,]    0    1    0
+##  [12,]    0    1    0
+##  [13,]    1    0    0
+##  [14,]    0    0    1
+##  [15,]    0    0    0
+##  [16,]    1    0    0
+##  [17,]    0    1    0
+##  [18,]    0    1    0
+##  [19,]    0    1    0
+##  [20,]    0    1    0
+##  [21,]    0    1    0
+##  [22,]    1    0    0
+##  [23,]    0    0    1
+##  [24,]    0    0    1
+##  [25,]    0    0    0
+##  [26,]    0    0    0
+##  [27,]    0    0    1
+##  [28,]    0    0    0
+##  [29,]    0    1    0
+##  [30,]    1    0    0
+##  [31,]    0    0    1
+##  [32,]    0    0    1
+##  [33,]    0    0    0
+##  [34,]    1    0    0
+##  [35,]    0    1    0
+##  [36,]    0    1    0
+##  [37,]    1    0    0
+##  [38,]    0    0    1
+##  [39,]    0    0    0
+##  [40,]    0    0    1
+##  [41,]    0    0    0
+##  [42,]    0    1    0
+##  [43,]    0    1    0
+##  [44,]    1    0    0
+##  [45,]    1    0    0
+##  [46,]    0    0    1
+##  [47,]    1    0    0
+##  [48,]    1    0    0
+##  [49,]    0    0    0
+##  [50,]    1    0    0
+##  [51,]    0    1    0
+##  [52,]    0    0    1
+##  [53,]    0    1    0
+##  [54,]    1    0    0
+##  [55,]    0    0    0
+##  [56,]    0    0    0
+##  [57,]    1    0    0
+##  [58,]    0    0    0
+##  [59,]    0    0    0
+##  [60,]    0    0    1
+##  [61,]    0    1    0
+##  [62,]    0    0    0
+##  [63,]    1    0    0
+##  [64,]    0    0    0
+##  [65,]    1    0    0
+##  [66,]    1    0    0
+##  [67,]    0    1    0
+##  [68,]    1    0    0
+##  [69,]    0    0    0
+##  [70,]    0    0    1
+##  [71,]    1    0    0
+##  [72,]    0    1    0
+##  [73,]    0    1    0
+##  [74,]    1    0    0
+##  [75,]    0    0    1
+##  [76,]    0    0    0
+##  [77,]    0    0    1
+##  [78,]    0    1    0
+##  [79,]    0    1    0
+##  [80,]    0    0    0
+##  [81,]    0    0    1
+##  [82,]    0    1    0
+##  [83,]    0    0    1
+##  [84,]    1    0    0
+##  [85,]    0    0    1
+##  [86,]    0    0    1
+##  [87,]    0    0    1
+##  [88,]    1    0    0
+##  [89,]    0    0    1
+##  [90,]    0    0    0
+##  [91,]    0    0    0
+##  [92,]    1    0    0
+##  [93,]    0    1    0
+##  [94,]    0    0    1
+##  [95,]    0    0    1
+##  [96,]    0    0    0
+##  [97,]    1    0    0
+##  [98,]    0    0    0
+##  [99,]    0    0    1
+## [100,]    0    0    1
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  What should the sum of each row be (in English)? Verify that.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\KeywordTok{sum}\NormalTok{(x_}\DecValTok{8}\NormalTok{[}\DecValTok{1}\NormalTok{,])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  How should the column sum look (in English)? Verify that.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\KeywordTok{sum}\NormalTok{(x_}\DecValTok{8}\NormalTok{[,}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 25
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Generate a matrix with 100 rows where the first column is realization
+  from a normal with mean 17 and variance 38, the second column is
+  uniform between -10 and 10, the third column is poisson with mean 6,
+  the fourth column in exponential with lambda of 9, the fifth column is
+  binomial with n = 20 and p = 0.12 and the sixth column is a binary
+  variable with 24\% 1's.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#TO-DO}
+\NormalTok{temp =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{17}\NormalTok{, }\DecValTok{38}\NormalTok{), }\KeywordTok{runif}\NormalTok{(}\DecValTok{100}\NormalTok{, }\OperatorTok{-}\DecValTok{10}\NormalTok{, }\DecValTok{10}\NormalTok{), }\KeywordTok{rpois}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{6}\NormalTok{), }\KeywordTok{rexp}\NormalTok{(}\DecValTok{100}\NormalTok{,}\DecValTok{9}\NormalTok{) , }\KeywordTok{rbinom}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{20}\NormalTok{, }\FloatTok{0.12}\NormalTok{), }\KeywordTok{sample}\NormalTok{(}\KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{), }\KeywordTok{c}\NormalTok{(}\DecValTok{76}\NormalTok{,}\DecValTok{24}\NormalTok{)))),}\DecValTok{100}\NormalTok{,}\DecValTok{6}\NormalTok{)}
+\NormalTok{temp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   [,1]             [,2] [,3]            [,4] [,5] [,6]
+##   [1,]  51.02927530293  6.3770083198324    8 0.0646847978027    2    1
+##   [2,]  36.74337298791  4.5296322880313    7 0.1166213461039    4    1
+##   [3,]  16.14698142881  1.1131754610687    8 0.0542708271080    1    1
+##   [4,]  27.48885959364 -9.8503940645605    5 0.0362918647006    1    0
+##   [5,]  -5.52610794232  4.5966429496184   11 0.1095388564278    3    0
+##   [6,] -29.39516429057  4.8135748412460    6 0.0927589201425    0    1
+##   [7,] -11.47209464168 -6.9534604111686    8 1.1687055365712    2    0
+##   [8,]  56.59277105024 -1.0165897803381    4 0.0212315739029    3    0
+##   [9,]  -5.67745896780  8.3579410193488    4 0.0523613415375    2    0
+##  [10,]  59.89452042538 -6.6549733700231    6 0.0196650465433    4    0
+##  [11,]  18.54750263780  3.9237144822255    9 0.1201909931537    4    0
+##  [12,] -17.42447904243 -4.0231698565185    6 0.0663892307008    2    1
+##  [13,]   7.60558611463 -1.8049805192277    7 0.0186680328722    1    1
+##  [14,]  33.17085696132 -4.5031543727964    7 0.4065709699540    3    0
+##  [15,]  93.28035240298 -5.3681486751884    6 0.0609776718128    4    0
+##  [16,] -22.46520847016 -0.7593269506469    6 0.0116292442609    1    1
+##  [17,]   2.45883583682  7.5411834148690    4 0.0196454730402    3    0
+##  [18,]  20.87094073465 -2.4841080373153    5 0.0011537588751    0    1
+##  [19,] -23.66918289218  7.8819180093706    6 0.0905028274236    2    1
+##  [20,]   1.62127404953 -6.8671844433993    4 0.0292061024552    3    0
+##  [21,]  67.10562243739 -2.0439158426598    1 0.0600653653447    2    0
+##  [22,] -27.51378904551  3.5339670954272    3 0.1313306159397    3    0
+##  [23,]  42.89260021890 -1.0742466803640    1 0.0150151389858    4    0
+##  [24,]  26.47142797548 -9.5408514421433    3 0.0853359576766    2    0
+##  [25,]  41.11058057095  5.0056688673794    4 0.1362927555991    2    0
+##  [26,] -11.57832625994 -5.4855467937887    2 0.3617834556247    2    0
+##  [27,]  61.09882025191  1.0307615250349    3 0.0574989922655    3    1
+##  [28,]  -1.77927397389  2.3170521855354    4 0.0484819067125    3    0
+##  [29,] -17.23719843415 -0.8677027514204    4 0.0769102233979    3    0
+##  [30,]  -4.24913741242 -6.8445366388187    6 0.0190636669803    4    0
+##  [31,]  -9.18976952699  1.3927628798410    4 0.0587879583343    5    0
+##  [32,]  47.82674788159  7.7065735729411    5 0.1134476860576    1    0
+##  [33,]  43.97680423177  2.4311829917133   10 0.0332222956242    4    0
+##  [34,]  40.64820292618  1.5836877189577    5 0.1717558693734    5    1
+##  [35,]  51.84171129938  9.7183036431670   12 0.0979584280562    4    0
+##  [36,]  72.47926400772  1.9037173502147    7 0.2940602792908    1    0
+##  [37,]  44.32442067307  7.3593981470913    6 0.1637513616753    1    0
+##  [38,]  32.41332523698  1.6409811610356   11 0.1225026876929    3    0
+##  [39,]  33.46571985317 -5.3204442560673   10 0.0195035101024    3    0
+##  [40,]   3.16843876684 -6.6236189100891    5 0.1035810986505    1    0
+##  [41,]  30.58466064208  9.6538871759549    4 0.1539810825507    2    0
+##  [42,]  26.46845210134  7.7001518802717    7 0.4865489059572    1    0
+##  [43,]  40.89366416027 -2.2914961399511    5 0.1771396881106    2    0
+##  [44,]  65.67830308479  9.6586323110387    5 0.0216008478569    5    0
+##  [45,]  62.35980251793  5.3013555984944    6 0.1462504581191    1    0
+##  [46,]  33.96483253176  2.3704542033374    7 0.0284647195207    2    0
+##  [47,]  34.22704439397 -6.3499197224155    7 0.0349735342378    2    1
+##  [48,]  79.70750598097  0.2408866770566    6 0.0999035729292    3    0
+##  [49,] -37.13003597949 -6.5652782423422    5 0.0964803214769    3    0
+##  [50,]  25.51030793207  3.9654759969562    6 0.0318339197482    3    0
+##  [51,]  31.87272196854 -9.3552100891247    7 0.0129717577042    3    0
+##  [52,]  24.33198986473 -8.9183431863785    7 0.0659706296089    2    0
+##  [53,]  54.08311502145  1.7382886772975    6 0.0221483573421    2    0
+##  [54,]  37.18602581591  2.2891344549134    6 0.0651625873935    4    0
+##  [55,]  37.57814355660 -0.1830648304895    4 0.1059691014963    4    0
+##  [56,]   0.65212544185  6.2522526830435    7 0.0636247447692    1    0
+##  [57,]   7.56387180638  6.6056682402268    3 0.0279094947541    3    0
+##  [58,]   3.98221946708  8.3346423087642    8 0.0520807964106    0    1
+##  [59,] -61.91411546589 -6.1364388372749    5 0.0162925564276    1    1
+##  [60,]  -0.71073040129 -1.2875591823831    7 0.0104925286258    2    1
+##  [61,]   0.39447116499 -0.4271242301911    3 0.1190744859776    6    0
+##  [62,] -32.33921801973  8.4484070772305    9 0.2171809331701    1    0
+##  [63,] -21.42442878617 -0.8605634793639    7 0.0171817748600    2    0
+##  [64,]  23.59309450890 -1.8802681891248    7 0.0467324180839    1    1
+##  [65,]  -7.96101793234  4.3736017681658    6 0.0037262274159    2    0
+##  [66,]  63.52986801544 -1.3242245651782   12 0.0510844268913    1    0
+##  [67,] -23.83686210313  3.0651292949915    3 0.0621463465504    2    0
+##  [68,]  17.53181996398 -5.8392177382484    5 0.0567456181679    5    1
+##  [69,]  14.19621426042 -4.0523020457476    4 0.0287634307622    2    0
+##  [70,]  24.34983033755 -0.9598066238686   13 0.0352916930181    7    0
+##  [71,]  22.74650577231 -6.9973275531083    3 0.0603560643374    3    1
+##  [72,]  86.81199606755 -5.4158335598186    7 0.0989904203923    1    0
+##  [73,] -37.69216303793  1.3835811940953    8 0.0232054537887    3    0
+##  [74,]  34.80422043426  4.4339391635731    7 0.0244214779550    1    0
+##  [75,]   6.02132417973 -0.4834924731404    3 0.1169262777760    0    1
+##  [76,]  46.28715598918 -9.5477719139308    7 0.0175876586388    3    0
+##  [77,]  72.84701370081 -6.6054816311225    7 0.0588042389395    4    0
+##  [78,] -48.42077411024 -7.6513163466007   13 0.0432775099975    1    1
+##  [79,]  24.78137537410 -8.2959630945697    9 0.1161560180020    2    0
+##  [80,] -15.39858338715 -8.5008871881291    8 0.0559411024571    3    0
+##  [81,] -30.09246891844  4.1232800111175    4 0.0810604983457    2    0
+##  [82,]  57.35014161017  0.0084978854284   10 0.1108013685332    3    0
+##  [83,]  47.29725645880  4.0280248411000    5 0.0844800843834    3    1
+##  [84,]  -1.75441781364  9.2353796400130    7 0.2287140130489    3    0
+##  [85,]  64.86873090371  6.9041195325553    9 0.0016964959602    4    0
+##  [86,]  75.71983334152 -3.5212421044707    8 0.7128384520084    3    0
+##  [87,] -41.58784867572 -3.2553641684353    3 0.0883139724693    2    1
+##  [88,]   2.77094117096 -5.7296690903604    5 0.0438574899272    0    1
+##  [89,]  73.35514152303  6.5169470896944    2 0.0609924246867    2    0
+##  [90,]  65.92996808485  6.9855989469215    2 0.4032349393780    2    0
+##  [91,]   6.30408124128  0.0286285625771    3 0.1972747964484    2    0
+##  [92,]  33.28234982549 -5.4049546690658   10 0.2163666730172    1    0
+##  [93,]  34.46211012482 -7.2879210393876   10 0.0161043444855    4    0
+##  [94,] -13.84956011165 -3.2509350404143   10 0.2473347222086    4    0
+##  [95,]  17.46285630876  1.7373222671449    5 0.0707171000023    3    0
+##  [96,] -68.64549256530  8.6212410032749    5 0.0372947561555    4    0
+##  [97,]  35.00413841431 -3.8670098967850    4 0.0313580415820    1    0
+##  [98,]  56.07512021259  7.6167191239074    7 0.0241407398134    2    0
+##  [99,] -13.18123669391  5.5785565078259    6 0.3937801203060    2    1
+## [100,] -41.82886424890  1.7803320102394    6 0.0569419579074    2    0
+\end{verbatim}
+
+
+\end{document}
