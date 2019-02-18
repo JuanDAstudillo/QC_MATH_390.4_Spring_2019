@@ -143,11 +143,11 @@ newlist = split(R, col(R), drop = T)
 * In one statement, use the `lapply` function to create a list whose keys are the column number and values are themselves a list with keys: "min" whose value is the minimum of the column, "max" whose value is the maximum of the column, "pct_missing" is the proportion of missingness in the column and "first_NA" whose value is the row number of the first time the NA appears. Use the `which` function.
 
 ```{r}
-list= lapply(newlist, function(R) {
+newlist= lapply(newlist, function(R) {
   minimum = min (R,na.rm = T)
   pct_missing = sum(is.na(R))/ length(R)*100 
   first_NA=min(which(is.na(R)))
-  maximum=max(R,na.rm=TRUE)
+  maximum=max(R,na.rm=T)
   c(minimum,maximum,pct_missing,first_NA)})
 ```
 
