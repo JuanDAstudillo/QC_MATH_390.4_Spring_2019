@@ -1,0 +1,291 @@
+---
+title: "Lab 2"
+author: "Juan D Astudillo"
+output: pdf_document
+---
+
+## Basic R Skills
+
+First, install the package `testthat` (a widely accepted testing suite for R) from https://github.com/r-lib/testthat using `pacman`. If you are using Windows, this will be a long install, but you have to go through it for some of the stuff we are doing in class. LINUX (or MAC) is preferred for coding. If you can't get it to work, install this package from CRAN (still using `pacman`), but this is not recommended long term.
+
+```{r}
+install.packages("testthat")
+install.packages("pacman")
+
+```
+
+* Use the `seq` function to create vector `v` consisting of all numbers from -100 to 100. 
+
+```{r}
+
+v = seq(-100,100)
+v
+```
+
+Test using the following code:
+
+```{r}
+library(testthat)
+expect_equal(v, -100 : 100) #it is to check v 
+```
+
+If there are any errors, the `expect_equal` function will tell you about them. If there are no errors, then it will be silent.
+
+* Create a function `my_reverse` which takes as required input a vector and returns the vector in reverse where the first entry is the last entry, etc. No function calls are allowed inside your function (otherwise that would defeat the purpose of the exercise).
+
+```{r}
+
+my_reverse = function(vec){
+ revvec = rep(NA, length(vec))##this is giving NA to the vector // up to the length of the vec
+   for (i in seq(1, length(vec))){ ## the for loop is taking i initializing it in 1 then going to the end of it
+   revvec[i] = vec[(length(vec) +1)-i]## since we want to revert it. i 
+   }
+ revvec
+}
+
+```
+
+Test using the following code:
+
+```{r}
+expect_equal(my_reverse(c("A", "B", "C")), c("C", "B", "A")) ##expect equal is to check what yo did.
+expect_equal(my_reverse(v), rev(v))
+```
+
+* Let `n = 50`. Create a nxn matrix `R` of exactly 50% entries 0's, 25% 1's 25% 2's in random locations.
+
+```{r}
+
+n=50
+R = matrix(sample(rep(c(0,1,2), c(50,25,25))), n, n)
+R
+```
+
+Test using the following and write two more tests as specified below:
+
+```{r}
+expect_equal(dim(R), c(n, n))
+#test that the only unique values are 0, 1, 2
+
+uniqueValues = TRUE
+for (i in R){
+  if (i != 0 & i!=1 & i !=2){
+    uniqueValues = FALSE
+  }
+}
+expect_equal(uniqueValues, TRUE)
+
+#test that there are exactly 625 2's
+expect_equal(625,sum(c(R)==2))
+table(R)
+
+```
+
+* Randomly punch holes (i.e. `NA`) values in this matrix so that approximately 30% of the entries are missing.
+
+```{r}
+x=c(R)#make matrix a vector
+newR = matrix(sample(replace(x,1:length(R)*0.3,NA)),nrow = n,ncol = n)
+sum(is.na(newR))
+
+```
+
+Use the testthat library to test that this worked correctly by ensuring the number of missing entries is between the 0.5%ile and 99.5%ile of the appropriate binomial.
+
+```{r}
+R_sNa = sum(is.na(newR))
+x=n*n
+expect_lt(R_sNa, qbinom(0.995, x, 0.3))
+expect_gt(R_sNa, qbinom(0.005, x, 0.3))
+```
+
+* Sort the rows matrix `R` by the largest row sum to lowest. Be careful about the NA's!
+
+```{r}
+r =c()
+for (i in 1:n){
+  r= c(r, sum(newR[i,], na.rm = TRUE) )
+ }
+row.names(newR)= r
+R = newR[order(rownames(newR), decreasing = TRUE), ]
+head(R)
+
+```
+
+Test using the following code.
+
+```{r}
+for (i in 2 : n){
+  expect_gte(sum(R[i - 1, ], na.rm = TRUE), sum(R[i, ], na.rm = TRUE))  
+}
+```
+
+* We will now learn the `apply` function. This is a handy function that saves writing for loops which should be eschewed in R. Use the apply function to compute a vector whose entries are the standard deviation of each row. Use the apply function to compute a vector whose entries are the standard deviation of each column. Be careful about the NA's!
+
+```{r}
+#std= standard deviation
+row_std = apply( R , 1, sd, na.rm = T)
+column_std = apply( R, 2, sd, na.rm = T)
+```
+
+* Use the `apply` function to compute a vector whose entries are the count of entries that are 1 or 2 in each column. Try to do this in one line.
+
+```{r}
+apply( R >= 1, 2, sum, na.rm=T)
+```
+
+* Use the `split` function to create a list whose keys are the column number and values are the vector of the columns. Look at the last example in the documentation `?split`.
+
+```{r}
+newlist = split(R, col(R), drop = T)
+```
+
+* In one statement, use the `lapply` function to create a list whose keys are the column number and values are themselves a list with keys: "min" whose value is the minimum of the column, "max" whose value is the maximum of the column, "pct_missing" is the proportion of missingness in the column and "first_NA" whose value is the row number of the first time the NA appears. Use the `which` function.
+
+```{r}
+list= lapply(newlist, function(R) {
+  minimum = min (R,na.rm = T)
+  pct_missing = sum(is.na(R))/ length(R)*100 
+  first_NA=min(which(is.na(R)))
+  maximum=max(R,na.rm=TRUE)
+  c(minimum,maximum,pct_missing,first_NA)})
+```
+
+
+* Create a vector `v` consisting of a sample of 1,000 iid normal realizations with mean -10 and variance 10.
+
+```{r}
+v=rnorm(1000,mean=-10,sd=sqrt(10))
+```
+
+* Find the average of `v` and the standard error of `v`.
+
+```{r}
+sum(v)/length(v)
+mean(v)
+stderror = sd(v)/(sqrt(length(v)))
+```
+
+* Find the 5%ile of `v` and use the `qnorm` function to compute what it theoretically should be.
+
+```{r}
+qnorm(p, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)
+
+t=quantile(v, probs=0.05)
+q=qnorm(0.05,-10,sqrt(10))
+expect_equal(as.numeric(t),as.numeric(q),tol=se)
+
+```
+
+
+* Create a list named `my_list` with keys "A", "B", ... where the entries are arrays of size 1, 2 x 2, 3 x 3 x 3, etc. Fill the array with the numbers 1, 2, 3, etc. Make 8 entries.
+
+
+```{r}
+nom= c("A", "B", "C", "D", "E", "F", "G", "H")
+my_list = list()
+for (i in 1:8){
+  my_list[[nom[i] ]]= array(seq(1,i**i), dim = rep(i, i))
+}
+```
+
+Test with the following uncomprehensive tests:
+
+
+```{r}
+expect_equal(my_list$A, 1)
+expect_equal(my_list[[2]][, 1], 1 : 2)
+expect_equal(dim(my_list[["H"]]), rep(8, 8))
+```
+
+Run the following code:
+
+```{r}
+lapply(my_list, object.size)
+```
+
+Use `?object.size` to read abou t what these functions do. Then explain the output you see above. For the later arrays, does it make sense given the dimensions of the arrays?
+
+Answer here in English.
+Object.size
+Provides an estimate of the memory that is being used to store in each key of an object, in our case of my_list.
+
+Now cleanup the namespace by deleting all stored objects and functions:
+
+```{r}
+rm(list= ls())
+
+```
+
+## Basic Binary Classification Modeling
+
+* Load the famous `iris` data frame into the namespace. Provide a summary of the columns and write a few descriptive sentences about the distributions using the code below and in English.
+
+```{r}
+data("iris")
+temp=iris 
+summary(temp)
+```
+
+The outcome metric is `Species`. This is what we will be trying to predict. However, we have only done binary classification in class (i.e. two classes). Thus the first order of business is to drop one class. Let's drop the level "virginica" from the data frame.
+
+```{r}
+temp = temp[temp$Species != "virginica",]
+summary(temp)
+
+```
+
+Now create a vector `y` that is length the number of remaining rows in the data frame whose entries are 0 if "setosa" and 1 if "versicolor".
+
+```{r}
+y = nrow (temp)
+  for( i in 1: nrow(temp)){
+    if(temp$Species[i] == "versicolor"){
+      y[i] = 1} 
+else y[i]=0 }
+```
+
+* Fit a threshold model to `y` using the feature `Sepal.Length`. Try to write your own code to do this. What is the estimated value of the threshold parameter? What is the total number of errors this model makes?
+
+```{r}
+X = as.matrix(cbind(temp[, 1, drop = F])) 
+MAX_ITER = 200
+w_vec = 0
+  for (iter in 1 : MAX_ITER){ 
+    for (i in 1 : nrow(X)){
+x_i = X[i]
+yhat_i = ifelse(sum(x_i * w_vec) > 0, 1, 0) 
+y_i = y[i]
+w_vec = w_vec + (y_i - yhat_i) * x_i
+  } 
+}
+
+```
+
+Does this make sense given the following summaries:
+
+```{r}
+summary(iris[iris$Species == "setosa", "Sepal.Length"])
+summary(iris[iris$Species == "virginica", "Sepal.Length"])
+```
+
+Write your answer here in English.
+Setosa
+Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  4.300   4.800   5.000   5.006   5.200   5.800 
+  
+Virginica  
+Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  4.900   6.225   6.500   6.588   6.900   7.900   
+
+Summary give us good amount of information to visualize where the points are. as well it gives some information to create a vage asumption of where the line will cut through the two data sets. therefore, out of this information we ca see that the data sets are not linearly separable.
+
+
+* What is the total number of errors this model makes (in-sample)?
+
+```{r}
+yhat = ifelse(X %*% w_vec > 0, 1, 0) 
+sum((y != yhat) / length(y))
+```
+
+ 
