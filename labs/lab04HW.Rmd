@@ -1,0 +1,243 @@
+---
+title: "Lab 4"
+author: "Juan D Astudillo"
+output: pdf_document
+date: "11:59PM March 9, 2019"
+---
+
+Note: the content of this lab is on the midterm exam (March 5) even though the lab itself is due after the midterm exam.
+
+
+We now move on to simple linear modeling using the ordinary least squares algorithm.
+
+Let's quickly recreate the sample data set from practice lecture 7:
+
+```{r}
+rm(list=ls())
+n = 20
+x = runif(n)
+beta_0 = 3
+beta_1 = -2
+y = beta_0 + beta_1 * x + rnorm(n, mean = 0, sd = 0.33)
+```
+
+Solve for the least squares line by computing $b_0$ and $b_1$ _without_ using the functions `mean`, `cor`, `cov`, `var`, `sd` but instead computing it from the $x$ and $y$ quantities manually using base function such as `sum` and other basic operators. See the class notes.
+
+```{r}
+meanx=(sum(x)/n)
+meany=(sum(y)/n)
+b_1= (sum(x*y)-n*meanx*meany)/(sum(x^2)-n*(meanx)^2)
+b_0= meany- b_1*meanx
+```
+
+Verify your computations are correct using the `lm` function in R:
+
+```{r}
+lm_mod = lm(y~x)
+b_vec = coef(lm_mod)
+pacman::p_load(testthat)
+expect_equal(b_0, as.numeric(b_vec[1]), tol = 1e-4)
+expect_equal(b_1, as.numeric(b_vec[2]), tol = 1e-4)
+```
+
+6. We are now going to repeat one of the first linear model building exercises in history --- that of Sir Francis Galton in 1886. First load up package `HistData`.
+
+```{r}
+library(HistData)
+```
+
+In it, there is a dataset called `Galton`. Load it using the `data` command:
+
+```{r}
+data("Galton")
+```
+
+You now should have a data frame in your workspace called `Galton`. Summarize this data frame and write a few sentences about what you see. Make sure you report $n$, $p$ and a bit about what the columns represent and how the data was measured. See the help file `?Galton`.
+
+```{r}
+summary(Galton)
+table(Galton)
+str(Galton)
+```
+
+TO-DO
+
+Find the average height (include both parents and children in this computation).
+
+```{r}
+n=928
+avg_height = 
+  (2*sum(Galton$parent) + sum(Galton$child))/(n*3)
+```
+
+Note that in Math 241 you learned that the sample average is an estimate of the "mean", the population expected value of height. We will call the average the "mean" going forward since it is probably correct to the nearest tenth of an inch with this amount of data.
+
+Run a linear model attempting to explain the childrens' height using the parents' height. Use `lm` and use the R formula notation. Compute and report $b_0$, $b_1$, RMSE and $R^2$. Use the correct units to report these quantities.
+
+```{r}
+mod=lm(Galton$child~Galton$parent)
+mod
+summary(mod)
+b_0 = coef(mod)[1]
+b_1 = coef(mod)[2]
+
+names(summary(mod))
+summary(mod)$r.squared #the R^2
+summary(mod)$sigma #the RMSE
+```
+
+Interpret all four quantities: $b_0$, $b_1$, RMSE and $R^2$.
+
+b_0 is the intercept and b_1 is the slope of our linear model. 
+RMSE indicates (how far off is our prediction to y) the average difference between the actual child's height and the predicted child's height. 
+R^2 is the difference of the sample variance to the null model. Here R^2 is 0.20, indicating the sample variance of errors is consideration to the null model. 
+
+
+How good is this model? How well does it predict? Discuss.
+
+The low R^2 shows that the model works poorly. RMSE, shows the measurement of the errors. both together imply that 
+this is not a good model because f the big sample variance.
+
+Now use the code from practice lecture 8 to plot the data and a best fit line using package `ggplot2`. Don't forget to load the library.
+
+```{r}
+library(ggplot2)
+ggplot(Galton, aes(child, parent)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm')
+
+```
+
+It is reasonable to assume that parents and their children have the same height. Explain why this is reasonable using basic biology.
+
+yes it could be reasonable to assume the parents and their children have the same height since 
+the parents will transfer some of their characteristics via DNA.
+
+If they were to have the same height and any differences were just random noise with expectation 0, what would the values of $\beta_0$ and $\beta_1$ be?
+
+If they were to have the same height and the differences were just random noise, then we can say that y=x 100% correlation, the intersept would be b_0=0, and the slope b_1 would be equal to 1.
+
+Let's plot (a) the data in $\mathbb{D}$ as black dots, (b) your least squares line defined by $b_0$ and $b_1$ in blue, (c) the theoretical line $\beta_0$ and $\beta_1$ if the parent-child height equality held in red and (d) the mean height in green.
+
+```{r}
+ggplot(Galton, aes(x = parent, y = child)) + 
+  geom_point() + 
+  geom_jitter() +
+  geom_abline(intercept = b_0, slope = b_1, color = "blue", size = 1) +
+  geom_abline(intercept = 0, slope = 1, color = "red", size = 1) +
+  geom_abline(intercept = avg_height, slope = 0, color = "darkgreen", size = 1) +
+  xlim(63.5, 72.5) + 
+  ylim(63.5, 72.5) +
+  coord_equal(ratio = 1)
+```
+
+Fill in the following sentence: 
+
+TO-DO: Children of short parents became (taller than their parents) on average and children of tall parents became (shorter than their parents) on average.
+
+Why did Galton call it "Regression towards mediocrity in hereditary stature" which was later shortened to "regression to the mean"?
+
+Galton called it "Regression towards mediocrity in hereditary stature" because the data shows a relationship
+children-parent that is passsed hereditary which show a linear relationship. 
+
+
+Why should this effect be real?
+
+it should be real. In reality parents pass its characteristics to their children by the information in the genes,
+the stronger characteristics will prevail, and tis will happend from generation to generation.
+
+
+You now have unlocked the mystery. Why is it that when modeling with $y$ continuous, everyone calls it "regression"? Write a better, more descriptive and appropriate name for building predictive models with $y$ continuous.
+
+TO-DO
+Galton called regression since as opposed to progressing, we are falling back to the mean. I would called the best
+match model, because we use the information from our old data set to create a linear model that matches the best to our data.
+
+Create a dataset $\mathbb{D}$ which we call `Xy` such that the linear model as $R^2$ about 50\% and RMSE approximately 1.
+
+```{r}
+x = c(2,2,3,4,5,6,1)
+y = c(1,2,2,0,0,1,3)
+Xy = data.frame(x = x, y = y)
+
+mod=lm(Xy$y~Xy$x)
+mod
+#summary(mod)
+#b_0 = coef(mod)[1]
+#b_1 = coef(mod)[2]
+#names(summary(mod))
+summary(mod)$r.squared #the R^2
+summary(mod)$sigma #the RMSE
+
+```
+
+
+Create a dataset $\mathbb{D}$ which we call `Xy` such that the linear model as $R^2$ about 0\% but x, y are clearly associated.
+
+```{r}
+x = rep( 1 : 5, 2)
+y = rep( 2 : 3, 5)
+Xy = data.frame(x = x, y = y)
+mod=lm(Xy$y~Xy$x)
+mod
+summary(mod)$r.squared #the R^2
+summary(mod)$sigma #the RMSE
+
+```
+
+
+Load up the famous iris dataset and drop the data for Species "virginica".
+
+```{r}
+data("iris")
+newiris = iris[iris$Species != "virginica", ]
+summary(iris)
+summary(newiris)
+```
+
+If the only input x is  Species and you are trying to predict y which is Petal.Length, what would a reasonable, naive prediction be under both Species? Hint: it's what we did in class.
+
+```{r}
+
+#meanVersicolor = mean(newiris$Species == 'versicolor')
+#meanSetosa =  mean(newiris$Species == 'setosa')
+#meany = mean(newiris$Species)
+#b_1 = (meanVersicolor - meanSetosa)
+#b_0 = (meanSetosa)
+#g_Petal_Length = b_0 + b_1
+
+x = newiris$Species 
+y = newiris$Petal.Length 
+
+sumVersicolor = 0
+sumSetosa = 0
+n = numeric()
+for(i in 1:length(x)){
+  if(x[i] == 'setosa'){
+    sumSetosa = sumSetosa + y[i]
+    n = i
+  } else{
+    sumVersicolor = sumVersicolor +y[i]
+  }
+}
+
+b_0 = sumVersicolor/n
+b_1 = sumSetosa/(length(x) - n) - b_0  
+  
+b_0  
+b_1  
+```
+
+Prove that this is the OLS model by fitting an appropriate `lm` and then using the predict function to verify you get the same answers as you wrote previously.
+
+```{r}
+reg1 <- lm(Petal.Length ~ newSpecies, newiris)
+reg1
+summary(reg1)
+predict(reg1)
+
+```
+
+
+
+
